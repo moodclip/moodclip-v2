@@ -62,13 +62,13 @@ export default defineConfig({
         v3_routeConfig: true,
       },
     }),
-    tsconfigPaths()
+    tsconfigPaths(),
   ],
-   build: {
+  build: {
     assetsInlineLimit: 0,
     // Add rollupOptions to correctly externalize server-side packages for the production build
     rollupOptions: {
-      external: ["@google-cloud/storage"],
+      external: ["@google-cloud/storage", "~/gcs.server"],
     },
   },
   optimizeDeps: {
