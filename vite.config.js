@@ -64,6 +64,10 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
+  // Add this ssr block to fix the build error
+  ssr: {
+    noExternal: ["@google-cloud/storage"],
+  },
   build: {
     assetsInlineLimit: 0,
   },
