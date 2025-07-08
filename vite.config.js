@@ -62,14 +62,14 @@ export default defineConfig({
         v3_routeConfig: true,
       },
     }),
-    tsconfigPaths(),
+    tsconfigPaths()
   ],
-  // UPDATED: Tell Vite to treat this as an external package for the server build
-  ssr: {
-    external: ["@google-cloud/storage"],
-  },
-  build: {
+   build: {
     assetsInlineLimit: 0,
+    // Add rollupOptions to correctly externalize server-side packages for the production build
+    rollupOptions: {
+      external: ["@google-cloud/storage"],
+    },
   },
   optimizeDeps: {
     include: ["@shopify/app-bridge-react", "@shopify/polaris"],
