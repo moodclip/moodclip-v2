@@ -64,9 +64,9 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
-  // Add this ssr block to fix the build error
+  // UPDATED: Tell Vite to treat this as an external package for the server build
   ssr: {
-    noExternal: ["@google-cloud/storage"],
+    external: ["@google-cloud/storage"],
   },
   build: {
     assetsInlineLimit: 0,
