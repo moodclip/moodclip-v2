@@ -68,7 +68,8 @@ export default defineConfig({
     assetsInlineLimit: 0,
     // Add rollupOptions to correctly externalize server-side packages for the production build
     rollupOptions: {
-      external: ["@google-cloud/storage", "~/gcs.server"],
+      // Corrected: Only externalize actual node packages, not local files.
+      external: ["@google-cloud/storage"],
     },
   },
   optimizeDeps: {
