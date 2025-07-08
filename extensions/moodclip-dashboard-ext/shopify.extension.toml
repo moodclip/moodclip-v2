@@ -1,7 +1,11 @@
-name = "MoodClip Dashboard"
-type = "ui_extension"
+api_version = "2025-07"       
+
+[[extensions]]
+type   = "ui_extension"
+name   = "MoodClip Dashboard"
 handle = "moodclip-dashboard"
 
-[targeting]
-target = "customer-account.page.render"
-module = "./src/index.jsx"
+# One target → one array-item
+[[extensions.targeting]]
+target  = "customer-account.page.render"
+module  = "./src/index.jsx"
