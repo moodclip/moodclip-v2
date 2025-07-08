@@ -1,0 +1,7 @@
+name = "MoodClip Dashboard"
+type = "ui_extension"
+handle = "moodclip-dashboard"
+
+[targeting]
+target = "customer-account.page.render"
+module = "./src/index.jsx"
