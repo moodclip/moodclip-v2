@@ -1,0 +1,7 @@
+name = "Moodclip Uploader"
+type = "theme"
+
+[[blocks]]
+name = "Moodclip File Uploader"
+target = "section"
+source = "blocks/app-block.liquid"

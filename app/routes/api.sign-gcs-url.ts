@@ -1,11 +1,24 @@
 import { json } from "@remix-run/node";
-// Corrected: Use a relative path instead of a path alias
-import { getGcsSignedUrl } from "../gcs.server";
+import type { ActionFunction } from "@remix-run/node";
+import { getGcsSignedUrl } from "../lib/gcs-logic";
 
-export async function action({ request }: { request: Request }) {
-  const { fileName, contentType } = await request.json();
+export const action: ActionFunction = async ({ request }) => {
+  console.log('✅ Received request to /api/sign-gcs-url');
 
-  const url = await getGcsSignedUrl(fileName, contentType);
+  try {
+    const body = await request.json();
+    console.log('✅ Parsed request body:', body);
 
-  return json({ url });
-}
+    const { fileName, contentType } = body;
+    console.log(`📝 Attempting to get signed URL for: ${fileName}`);
+
+    const url = await getGcsSignedUrl(fileName, contentType);
+    console.log('✅ Successfully generated signed URL.');
+
+    return json({ url });
+
+  } catch (err: any) {
+    console.error('❌ CRASH POINT!', err.stack || err);
+    return new Response('Internal Server Error', { status: 500 });
+  }
+};

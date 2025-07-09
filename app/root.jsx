@@ -4,9 +4,20 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
+import { AppProvider } from "@shopify/shopify-app-remix/react";
+import shopify from "./shopify.server";
+
+// This loader function is necessary to get the API key for the AppProvider
+export const loader = async ({ request }) => {
+  await shopify.authenticate.admin(request);
+  return process.env.SHOPIFY_API_KEY;
+};
 
 export default function App() {
+  const apiKey = useLoaderData();
+
   return (
     <html>
       <head>
@@ -21,7 +32,9 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        <AppProvider isEmbeddedApp apiKey={apiKey}>
+          <Outlet />
+        </AppProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
