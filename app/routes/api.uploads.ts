@@ -1,5 +1,5 @@
 import { Storage } from "@google-cloud/storage";
-import type { ActionFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import * as remixNode from "@remix-run/node";
 
 const { json, createFileUploadHandler, parseMultipartFormData } = remixNode;
@@ -11,6 +11,21 @@ const credentials = process.env.GCS_SA_KEY
 const storage = new Storage({ credentials });
 const bucketName = "mf-uploads-prod";
 const bucket = storage.bucket(bucketName);
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, X-Uppy-Upload-ID",
+        "Access-Control-Max-Age": "86400",
+      },
+    });
+  }
+  return new Response("Method Not Allowed", { status: 405 });
+};
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const uploadHandler = createFileUploadHandler({
