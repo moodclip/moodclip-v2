@@ -1,23 +1,14 @@
-import {
-  json,
-  createFileUploadHandler,
-  parseMultipartFormData,
-  type ActionFunctionArgs,
-} from "@remix-run/node";
 import { Storage } from "@google-cloud/storage";
+import type { ActionFunctionArgs } from "@remix-run/node";
+import * as remixNode from "@remix-run/node";
 
-// --- Configuration for Production ---
-// On a live server, we'll get credentials from an environment variable.
-// This is more secure than storing a key file on the server.
+const { json, createFileUploadHandler, parseMultipartFormData } = remixNode;
+
 const credentials = process.env.GCS_SA_KEY
   ? JSON.parse(process.env.GCS_SA_KEY)
   : undefined;
 
-// The Storage constructor will automatically use the credentials from the
-// GOOGLE_APPLICATION_CREDENTIALS file path on your local machine if the
-// GCS_SA_KEY variable isn't set.
 const storage = new Storage({ credentials });
-
 const bucketName = "mf-uploads-prod";
 const bucket = storage.bucket(bucketName);
 
