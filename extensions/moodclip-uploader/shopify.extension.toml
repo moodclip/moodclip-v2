@@ -1,5 +1,8 @@
-name = "Moodclip Uploader"
+name = "Moodclip Uploader v2"
 type = "theme"
+
+[capabilities]
+network_access = true
 
 [[blocks]]
 name = "Moodclip File Uploader"

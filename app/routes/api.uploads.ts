@@ -3,10 +3,10 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { GCS_SA_KEY, GCS_BUCKET } = process.env;
+  const { GCS_BUCKET } = process.env;
 
-  if (!GCS_SA_KEY || !GCS_BUCKET) {
-    console.error("GCS environment variables are not set.");
+  if (!GCS_BUCKET) {
+    console.error("GCS_BUCKET environment variable is not set.");
     return json({ error: "Server configuration error." }, { status: 500 });
   }
 
@@ -19,8 +19,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   try {
-    const credentials = JSON.parse(GCS_SA_KEY.replace(/\\n/g, "\n"));
-    const storage = new Storage({ credentials });
+    const storage = new Storage(); // This now works automatically!
     const bucket = storage.bucket(GCS_BUCKET);
 
     const options = {

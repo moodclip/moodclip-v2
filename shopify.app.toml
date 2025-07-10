@@ -3,32 +3,29 @@
 client_id = "bc4a14e184b8697b63929e67246d1871"
 name = "moodclip-v2"
 handle = "moodclip-v2-1"
-application_url = "https://prep-duncan-morris-drilling.trycloudflare.com"
+application_url = "https://bikes-wx-interact-currencies.trycloudflare.com"
 embedded = true
 
 [build]
 automatically_update_urls_on_dev = true
+include_config_on_deploy = true
 
 [webhooks]
-api_version = "2025-07"
+api_version = "2024-07"
 
   [[webhooks.subscriptions]]
-  topics = [ "app/scopes_update" ]
-  uri = "https://example.com/webhooks/app/scopes_update"
-
-  [[webhooks.subscriptions]]
-  topics = [ "app/uninstalled" ]
-  uri = "https://example.com/webhooks/app/uninstalled"
+  topics = [ "app/scopes_update", "app/uninstalled" ]
+  uri = "/webhooks"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = "write_products"
 
 [auth]
-redirect_urls = ["https://prep-duncan-morris-drilling.trycloudflare.com/auth/callback", "https://prep-duncan-morris-drilling.trycloudflare.com/auth/shopify/callback", "https://prep-duncan-morris-drilling.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://bikes-wx-interact-currencies.trycloudflare.com/auth/callback", "https://bikes-wx-interact-currencies.trycloudflare.com/auth/shopify/callback", "https://bikes-wx-interact-currencies.trycloudflare.com/api/auth/callback"]
 
 [app_proxy]
-url = "https://prep-duncan-morris-drilling.trycloudflare.com"
+url = "https://bikes-wx-interact-currencies.trycloudflare.com"
 subpath = "moodclip-uploader"
 prefix = "apps"
 

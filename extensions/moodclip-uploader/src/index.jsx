@@ -1,46 +1,45 @@
-import React, { useState } from 'react';
+console.log("Uploader Code Version: July 10 @ 7:50 AM (Friend's Advice)");
+
+import React from 'react';
 import { createRoot } from 'react-dom/client';
-import Uppy from '@uppy/core';
-import XHRUpload from '@uppy/xhr-upload';
-import { Dashboard } from '@uppy/react';
-import '@uppy/core/dist/style.min.css';
-import '@uppy/dashboard/dist/style.min.css';
-import { AppProvider, Card, BlockStack, Text } from '@shopify/polaris';
+import { AppProvider, Card, BlockStack, Text, Button } from '@shopify/polaris';
 import "@shopify/polaris/build/esm/styles.css";
 
 const Block = () => {
   const { title } = window.moodclip?.settings || { title: 'Upload Your Video' };
 
-  const [uppy] = useState(() => {
-    const uppyInstance = new Uppy({
-      autoProceed: true,
-      restrictions: {
-        maxNumberOfFiles: 1,
-        allowedFileTypes: ['video/*'],
-      },
-    });
+  const handleTestFetch = async () => {
+    console.log("[Test] Button clicked. Starting fetch...");
+    try {
+      // Applying friend's advice: using back-ticks for the URL string.
+      const response = await fetch(
+        `/apps/moodclip-uploader/api/uploads?name=test.mp4&type=video/mp4`, 
+        { credentials: 'include' }
+      );
 
-    uppyInstance.use(XHRUpload, {
-      endpoint: '/apps/moodclip-uploader/api/upload',
-      method: 'POST',
-      fieldName: 'file',
-      timeout: 0, // Allow for long uploads
-    });
+      console.log("[Test] Fetch response received. Status:", response.status);
 
-    return uppyInstance;
-  });
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("[Test] Response not OK. Server returned error:", response.status, errorText);
+        return;
+      }
+
+      const responseBody = await response.text();
+      console.log("[Test] SUCCESS! Raw response body from backend:", responseBody);
+      
+    } catch (error) {
+      console.error("[Test] CATCH BLOCK: An error occurred during fetch.", error);
+    }
+  };
 
   return (
     <AppProvider i18n={{}}>
       <Card>
         <BlockStack gap="200">
           <Text variant="headingMd" as="h2">{title}</Text>
-          <Dashboard
-            uppy={uppy}
-            width="100%"
-            height="400px"
-            proudlyDisplayPoweredByUppy={false}
-          />
+          <Text>Click the button below to test the connection to the backend.</Text>
+          <Button onClick={handleTestFetch}>Test Backend Connection</Button>
         </BlockStack>
       </Card>
     </AppProvider>
