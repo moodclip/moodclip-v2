@@ -25,19 +25,23 @@ const Block = () => {
     try {
       const params = new URLSearchParams({
         name: file.name,
-        type: file.type || 'application/octet-stream', // Fallback for safety
+        type: file.type || 'application/octet-stream',
       });
       
       const backendUrl = `/apps/moodclip-uploader/uploads?${params}`;
       
       const response = await fetch(backendUrl);
+      const data = await response.json();
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Failed to get signed URL: ${errorData.error || response.statusText}`);
+        throw new Error(data.error || 'Failed to get signed URL.');
       }
 
-      const { signedUrl } = await response.json();
+      const { signedUrl } = data;
+
+      if (!signedUrl) {
+        throw new Error("Received an invalid response from the server.");
+      }
 
       setUploadStatus({ state: 'uploading', message: 'Uploading file...' });
 
