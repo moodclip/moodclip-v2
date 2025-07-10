@@ -3,9 +3,6 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  console.log("--- Checking Environment Variables ---");
-  console.log("GCS_BUCKET value:", process.env.GCS_BUCKET);
-  console.log("GOOGLE_APPLICATION_CREDENTIALS value:", process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
   const { GCS_BUCKET } = process.env;
 
