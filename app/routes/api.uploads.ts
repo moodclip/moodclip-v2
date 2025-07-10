@@ -3,11 +3,15 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+  console.log("--- Checking Environment Variables ---");
+  console.log("GCS_BUCKET value:", process.env.GCS_BUCKET);
+  console.log("GOOGLE_APPLICATION_CREDENTIALS value:", process.env.GOOGLE_APPLICATION_CREDENTIALS);
+
   const { GCS_BUCKET } = process.env;
 
   if (!GCS_BUCKET) {
-    console.error("GCS_BUCKET environment variable is not set.");
-    return json({ error: "Server configuration error." }, { status: 500 });
+    console.error("GCS_BUCKET environment variable was not found in process.env.");
+    return json({ error: "Server configuration error: GCS_BUCKET is missing." }, { status: 500 });
   }
 
   const { searchParams } = new URL(request.url);
@@ -19,7 +23,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   try {
-    const storage = new Storage(); // This now works automatically!
+    const storage = new Storage();
     const bucket = storage.bucket(GCS_BUCKET);
 
     const options = {
