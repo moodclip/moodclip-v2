@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "build": "vite build"
+    "build": "vite build --config vite.config.js"
   },
   "dependencies": {
     "@shopify/polaris": "^12.0.0",

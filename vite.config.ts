@@ -1,3 +1,7 @@
+import { defineConfig } from "vite";
+import { vitePlugin as remix } from "@remix-run/dev";
+import tsconfigPaths from "vite-tsconfig-paths";
+
 if (
   process.env.HOST &&
   (!process.env.SHOPIFY_APP_URL ||
@@ -6,10 +10,6 @@ if (
   process.env.SHOPIFY_APP_URL = process.env.HOST;
   delete process.env.HOST;
 }
-
-import { defineConfig } from "vite";
-import { vitePlugin as remix } from "@remix-run/dev";
-import path from "path";
 
 export default defineConfig({
   plugins: [
@@ -23,12 +23,8 @@ export default defineConfig({
         v3_singleFetch: false,
       },
     }),
+    tsconfigPaths(),
   ],
-  resolve: {
-    alias: {
-      "~": path.resolve(__dirname, "app"),
-    },
-  },
   server: {
     host: true,
     hmr: {

@@ -1,9 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { createRoot } from 'react-dom/client';
-import { AppProvider, Card, BlockStack, Text, Button, DropZone, InlineStack, Banner } from '@shopify/polaris';
+import { AppProvider, Card, BlockStack, Text, Button, DropZone, Banner } from '@shopify/polaris';
 import "@shopify/polaris/build/esm/styles.css";
-
-console.log("Uploader Code Version: 2025‑07‑10 @ 10:50 AM – TEST PUSH #1");
 
 const Block = () => {
   const { title } = window.moodclip?.settings || { title: 'Upload Your Video' };
@@ -25,7 +23,7 @@ const Block = () => {
     setUploadStatus({ state: 'uploading', message: 'Preparing upload...' });
 
     try {
-      const backendUrl = `https://moodclip-v2.onrender.com/api/uploads?name=${encodeURIComponent(file.name)}&type=${encodeURIComponent(file.type)}`;
+      const backendUrl = `/apps/moodclip-uploader/uploads?name=${encodeURIComponent(file.name)}&type=${encodeURIComponent(file.type)}`;
       
       const response = await fetch(backendUrl);
 

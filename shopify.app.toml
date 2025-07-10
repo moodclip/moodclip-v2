@@ -1,8 +1,8 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "bc4a14e184b8697b63929e67246d1871"
-name = "moodclip-v2"
-handle = "moodclip-v2-1"
+name = "moodclip-v3"
+handle = "moodclip-v3"
 application_url = "https://moodclip-v2.onrender.com/"
 embedded = true
 
@@ -15,7 +15,7 @@ api_version = "2024-07"
 
   [[webhooks.subscriptions]]
   topics = [ "app/scopes_update", "app/uninstalled" ]
-  uri = "https://girl-deserve-totally-shares.trycloudflare.com/webhooks"
+  uri = "/webhooks"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
@@ -29,7 +29,8 @@ redirect_urls = [
 ]
 
 [app_proxy]
-url = "https://girl-deserve-totally-shares.trycloudflare.com/"
+# This URL must point to your production server, not a local tunnel.
+url = "https://moodclip-v2.onrender.com/proxy"
 subpath = "moodclip-uploader"
 prefix = "apps"
 

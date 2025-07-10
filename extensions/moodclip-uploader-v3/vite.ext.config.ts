@@ -1,22 +1,26 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  plugins: [react()],
-
+  root: __dirname,
   define: {
     'process.env': {}
   },
   build: {
     outDir: 'assets',
+    emptyOutDir: true,
     lib: {
       entry: 'src/index.jsx',
       name: 'MoodclipUploader',
-      fileName: 'app-block',
       formats: ['umd'],
+      fileName: () => 'app-block.umd.js',
     },
     rollupOptions: {
       output: {
+        inlineDynamicImports: true,
         assetFileNames: (assetInfo) => {
           if (assetInfo.name === 'style.css') {
             return 'app-block.css';

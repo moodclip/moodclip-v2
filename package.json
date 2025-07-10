@@ -2,7 +2,8 @@
   "name": "moodclip-v2",
   "private": true,
   "scripts": {
-    "build": "remix vite:build",
+    "build": "npm run build:ext && remix vite:build",
+    "build:ext": "vite build --config extensions/moodclip-uploader-v3/vite.ext.config.ts",
     "dev": "remix vite:dev",
     "config:link": "shopify app config link",
     "generate": "shopify app generate",
