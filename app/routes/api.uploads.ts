@@ -1,70 +1,41 @@
 import { Storage } from "@google-cloud/storage";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import * as remixNode from "@remix-run/node";
-
-const { json, createFileUploadHandler, parseMultipartFormData } = remixNode;
-
-const credentials = process.env.GCS_SA_KEY
-  ? JSON.parse(process.env.GCS_SA_KEY)
-  : undefined;
-
-const storage = new Storage({ credentials });
-const bucketName = "mf-uploads-prod";
-const bucket = storage.bucket(bucketName);
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  if (request.method === "OPTIONS") {
-    return new Response(null, {
-      status: 204,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, X-Uppy-Upload-ID",
-        "Access-Control-Max-Age": "86400",
-      },
-    });
-  }
-  return new Response("Method Not Allowed", { status: 405 });
-};
+  const { GCS_SA_KEY, GCS_BUCKET } = process.env;
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const uploadHandler = createFileUploadHandler({
-    maxPartSize: 500_000_000,
-  });
+  if (!GCS_SA_KEY || !GCS_BUCKET) {
+    console.error("GCS environment variables are not set.");
+    return json({ error: "Server configuration error." }, { status: 500 });
+  }
+
+  const { searchParams } = new URL(request.url);
+  const fileName = searchParams.get("name");
+  const contentType = searchParams.get("type");
+
+  if (!fileName || !contentType) {
+    return json({ error: "Missing 'name' or 'type' query parameters." }, { status: 400 });
+  }
 
   try {
-    const formData = await parseMultipartFormData(request, uploadHandler);
-    const file = formData.get("file");
+    const credentials = JSON.parse(GCS_SA_KEY.replace(/\\n/g, "\n"));
+    const storage = new Storage({ credentials });
+    const bucket = storage.bucket(GCS_BUCKET);
 
-    if (!file || typeof file === "string") {
-      return json({ error: "File not found in form data." }, { status: 400 });
-    }
+    const options = {
+      version: "v4" as const,
+      action: "write" as const,
+      expires: Date.now() + 15 * 60 * 1000,
+      contentType,
+    };
 
-    const buffer = Buffer.from(await file.arrayBuffer());
+    const [signedUrl] = await bucket.file(fileName).getSignedUrl(options);
+    return json({ signedUrl });
 
-    const blob = bucket.file(file.name);
-    const blobStream = blob.createWriteStream({
-      contentType: file.type,
-      resumable: false,
-    });
-
-    const uploadPromise = new Promise((resolve, reject) => {
-      blobStream.on("finish", () => {
-        const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
-        resolve({ success: true, url: publicUrl });
-      });
-      blobStream.on("error", (err) => {
-        reject(err);
-      });
-      blobStream.end(buffer);
-    });
-
-    const result = await uploadPromise;
-    return json(result);
-
-  } catch (error: unknown) {
+  } catch (error) {
     const message = error instanceof Error ? error.message : "An unknown error occurred.";
-    console.error("Upload to GCS failed:", message);
-    return json({ error: "Upload failed.", details: message }, { status: 500 });
+    console.error("Failed to generate signed URL:", error);
+    return json({ error: "Could not generate upload URL.", details: message }, { status: 500 });
   }
 };
