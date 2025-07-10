@@ -1,3 +1,4 @@
+console.log('🔥 Remix booted', new Date().toISOString());
 import { Storage } from "@google-cloud/storage";
 import { json } from "@remix-run/node";
 import type { LoaderFunctionArgs } from "@remix-run/node";
