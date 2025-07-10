@@ -23,7 +23,12 @@ const Block = () => {
     setUploadStatus({ state: 'uploading', message: 'Preparing upload...' });
 
     try {
-      const backendUrl = `/apps/moodclip-uploader/uploads?name=${encodeURIComponent(file.name)}&type=${encodeURIComponent(file.type)}`;
+      const params = new URLSearchParams({
+        name: file.name,
+        type: file.type || 'application/octet-stream', // Fallback for safety
+      });
+      
+      const backendUrl = `/apps/moodclip-uploader/uploads?${params}`;
       
       const response = await fetch(backendUrl);
 

@@ -27,6 +27,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const fileName = searchParams.get("name");
   const contentType = searchParams.get("type");
 
+  // Log the incoming parameters to the server console
+  console.log(`[Proxy] Received request for signed URL. Name: ${fileName}, Type: ${contentType}`);
+
   if (!fileName || !contentType) {
     return new Response(JSON.stringify({ error: "Missing 'name' or 'type' query parameters." }), {
         status: 400,
