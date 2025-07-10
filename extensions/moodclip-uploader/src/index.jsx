@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client';
 import { AppProvider, Card, BlockStack, Text, Button, DropZone, InlineStack, Banner } from '@shopify/polaris';
 import "@shopify/polaris/build/esm/styles.css";
 
+console.log("Uploader Code Version: 2025‑07‑10 @ 10:50 AM – TEST PUSH #1");
+
 const Block = () => {
   const { title } = window.moodclip?.settings || { title: 'Upload Your Video' };
 
@@ -31,6 +33,7 @@ const Block = () => {
         const errorData = await response.json();
         throw new Error(`Failed to get signed URL: ${errorData.error || response.statusText}`);
       }
+
       const { signedUrl } = await response.json();
 
       setUploadStatus({ state: 'uploading', message: 'Uploading file...' });
@@ -55,7 +58,6 @@ const Block = () => {
     }
   };
 
-  // --- Simplified UI without Thumbnail preview ---
   const fileUpload = !file && <DropZone.FileUpload />;
   const uploadedFile = file && (
     <Text variant="bodyMd" as="p">

@@ -3,7 +3,7 @@
 client_id = "bc4a14e184b8697b63929e67246d1871"
 name = "moodclip-v2"
 handle = "moodclip-v2-1"
-application_url = "https://girl-deserve-totally-shares.trycloudflare.com"
+application_url = "https://moodclip-v2.onrender.com/"
 embedded = true
 
 [build]
@@ -15,17 +15,21 @@ api_version = "2024-07"
 
   [[webhooks.subscriptions]]
   topics = [ "app/scopes_update", "app/uninstalled" ]
-  uri = "/webhooks"
+  uri = "https://girl-deserve-totally-shares.trycloudflare.com/webhooks"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = "write_products"
 
 [auth]
-redirect_urls = ["https://girl-deserve-totally-shares.trycloudflare.com/auth/callback", "https://girl-deserve-totally-shares.trycloudflare.com/auth/shopify/callback", "https://girl-deserve-totally-shares.trycloudflare.com/api/auth/callback"]
+redirect_urls = [
+  "https://moodclip-v2.onrender.com/auth/callback",
+  "https://moodclip-v2.onrender.com/auth/shopify/callback",
+  "https://moodclip-v2.onrender.com/api/auth/callback"
+]
 
 [app_proxy]
-url = "https://girl-deserve-totally-shares.trycloudflare.com"
+url = "https://girl-deserve-totally-shares.trycloudflare.com/"
 subpath = "moodclip-uploader"
 prefix = "apps"
 
