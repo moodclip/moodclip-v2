@@ -3,7 +3,7 @@
 client_id = "bc4a14e184b8697b63929e67246d1871"
 name = "moodclip-v2"
 handle = "moodclip-v2-1"
-application_url = "https://bikes-wx-interact-currencies.trycloudflare.com"
+application_url = "https://girl-deserve-totally-shares.trycloudflare.com"
 embedded = true
 
 [build]
@@ -22,10 +22,10 @@ api_version = "2024-07"
 scopes = "write_products"
 
 [auth]
-redirect_urls = ["https://bikes-wx-interact-currencies.trycloudflare.com/auth/callback", "https://bikes-wx-interact-currencies.trycloudflare.com/auth/shopify/callback", "https://bikes-wx-interact-currencies.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://girl-deserve-totally-shares.trycloudflare.com/auth/callback", "https://girl-deserve-totally-shares.trycloudflare.com/auth/shopify/callback", "https://girl-deserve-totally-shares.trycloudflare.com/api/auth/callback"]
 
 [app_proxy]
-url = "https://bikes-wx-interact-currencies.trycloudflare.com"
+url = "https://girl-deserve-totally-shares.trycloudflare.com"
 subpath = "moodclip-uploader"
 prefix = "apps"
 

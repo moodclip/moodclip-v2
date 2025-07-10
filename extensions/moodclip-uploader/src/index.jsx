@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { createRoot } from 'react-dom/client';
-import { AppProvider, Card, BlockStack, Text, Button, DropZone, Thumbnail, InlineStack, Banner } from '@shopify/polaris';
-import { NoteIcon } from "@shopify/polaris-icons";
+import { AppProvider, Card, BlockStack, Text, Button, DropZone, InlineStack, Banner } from '@shopify/polaris';
 import "@shopify/polaris/build/esm/styles.css";
 
 const Block = () => {
@@ -24,7 +23,6 @@ const Block = () => {
     setUploadStatus({ state: 'uploading', message: 'Preparing upload...' });
 
     try {
-      // Use the full URL to your backend API
       const backendUrl = `https://moodclip-v2.onrender.com/api/uploads?name=${encodeURIComponent(file.name)}&type=${encodeURIComponent(file.type)}`;
       
       const response = await fetch(backendUrl);
@@ -57,24 +55,12 @@ const Block = () => {
     }
   };
 
-  const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+  // --- Simplified UI without Thumbnail preview ---
   const fileUpload = !file && <DropZone.FileUpload />;
   const uploadedFile = file && (
-    <InlineStack>
-      <Thumbnail
-        size="small"
-        alt={file.name}
-        source={
-          validImageTypes.includes(file.type)
-            ? window.URL.createObjectURL(file)
-            : NoteIcon
-        }
-      />
-      <div>
-        {file.name}{' '}
-        <Text variant="bodySm" as="p">{file.size} bytes</Text>
-      </div>
-    </InlineStack>
+    <Text variant="bodyMd" as="p">
+      Selected: {file.name} ({file.size} bytes)
+    </Text>
   );
 
   return (
