@@ -13,9 +13,5 @@ WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=build /app .
 
-# The entrypoint script will run migrations then start the server
-COPY entrypoint.sh .
-RUN chmod +x entrypoint.sh
-
 EXPOSE 8080
-ENTRYPOINT ["./entrypoint.sh"]
+CMD ["npm", "run", "start:prod"]
