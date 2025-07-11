@@ -9,7 +9,7 @@ const fail = (message: string, statusCode: number) =>
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   console.log('🔥 Remix booted', new Date().toISOString());
-  await authenticate.proxy(request);
+  const context = await authenticate.public.appProxy(request);
 
   if (request.method === "OPTIONS") {
     return new Response(null, {
