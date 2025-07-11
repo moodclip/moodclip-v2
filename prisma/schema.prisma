@@ -30,5 +30,3 @@ model Session {
 
   @@map("sessions") // 👈 Shopify adapter expects lowercase + plural table name
 }
-s
- 
