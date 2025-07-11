@@ -32,8 +32,8 @@ steps:
     - '--concurrency'
     - '80'
     - '--set-secrets=DATABASE_URL=DATABASE_URL:latest,SHOPIFY_API_KEY=SHOPIFY_API_KEY:latest,SHOPIFY_API_SECRET=SHOPIFY_API_SECRET:latest'
-    # FINAL FIX: Using ^;^ to declare semicolon as the delimiter, and separating env vars with semicolons.
-    - '--set-env-vars=^;^GCS_BUCKET=mf-uploads-prod;SCOPES=read_products,write_script_tags;SHOPIFY_APP_URL=https://placeholder.run.app'
+    # FINAL FIX: Updated with the real service URL.
+    - '--set-env-vars=^;^GCS_BUCKET=mf-uploads-prod;SCOPES=read_products,write_script_tags;SHOPIFY_APP_URL=https://mf-backend-270455452709.us-central1.run.app'
     - '--add-cloudsql-instances'
     - '${_SQL_CONNECTION_NAME}'
 
