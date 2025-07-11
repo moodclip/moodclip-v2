@@ -1,0 +1,47 @@
+steps:
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:${COMMIT_SHA}', '.']
+
+# Push the container image to Artifact Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:${COMMIT_SHA}']
+
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+    - 'run'
+    - 'deploy'
+    - '${_SERVICE}'
+    - '--image'
+    - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:${COMMIT_SHA}'
+    - '--region'
+    - '${_REGION}'
+    - '--service-account'
+    - 'mf-backend-sa@${PROJECT_ID}.iam.gserviceaccount.com'
+    - '--allow-unauthenticated'
+    - '--min-instances'
+    - '0'
+    - '--max-instances'
+    - '2'
+    - '--cpu'
+    - '1'
+    - '--memory'
+    - '512Mi'
+    - '--concurrency'
+    - '80'
+    - '--set-secrets=DATABASE_URL=DATABASE_URL:latest,SHOPIFY_API_KEY=SHOPIFY_API_KEY:latest,SHOPIFY_API_SECRET=SHOPIFY_API_SECRET:latest'
+    - '--set-env-vars=GCS_BUCKET=mf-uploads-prod,SCOPES=read_products,write_script_tags,SHOPIFY_APP_URL=https://placeholder.run.app' # URL will be updated post-deploy
+    - '--add-cloudsql-instances' # Use this instead of the old --sql-instances
+    - '${_SQL_CONNECTION_NAME}'
+
+images:
+- '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:${COMMIT_SHA}'
+
+substitutions:
+  _SERVICE: mf-backend
+  _REPOSITORY: backend
+  _REGION: us-central1
+  _SQL_CONNECTION_NAME: 'moodflow-464810:us-central1:moodflow-postgres'
+  

@@ -2,20 +2,39 @@ import React, { useState, useCallback } from 'react';
 import { createRoot } from 'react-dom/client';
 import { AppProvider, Card, BlockStack, Text, Button, DropZone, Banner } from '@shopify/polaris';
 import "@shopify/polaris/build/esm/styles.css";
+import { v4 as uuidv4 } from 'uuid'; // CHANGE 1: Import the UUID library
+
+// This is a placeholder function. You must replace this with your app's actual
+// method for getting the logged-in customer's ID.
+// If customers are not logged in, you can use a static folder name like 'public-uploads'.
+const getMyCurrentUserId = () => {
+  // Example: return window.Shopify.customer.id; or some other session identifier.
+  // For now, we'll use a generic ID.
+  return window.Shopify?.customer?.id || 'guest-user';
+}
+
 
 const Block = () => {
   const { title } = window.moodclip?.settings || { title: 'Upload Your Video' };
 
   const [file, setFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState({ state: 'idle', message: '' });
+  const [lastUploadedFile, setLastUploadedFile] = useState(null);
 
   const handleDropZoneDrop = useCallback(
-    (_dropFiles, acceptedFiles, _rejectedFiles) =>
-      setFile(acceptedFiles[0]),
+    (_dropFiles, acceptedFiles, _rejectedFiles) => {
+      setFile(acceptedFiles[0]);
+      setUploadStatus({ state: 'idle', message: '' });
+    },
     [],
   );
 
   const handleUpload = async () => {
+    if (lastUploadedFile && file && lastUploadedFile.name === file.name && lastUploadedFile.size === file.size) {
+      setUploadStatus({ state: 'success', message: 'This file has already been uploaded.' });
+      return;
+    }
+
     if (!file) {
       setUploadStatus({ state: 'error', message: 'Please select a file to upload.' });
       return;
@@ -23,8 +42,13 @@ const Block = () => {
     setUploadStatus({ state: 'uploading', message: 'Preparing upload...' });
 
     try {
+      // CHANGE 2: Create the unique filename (also called a "key")
+      const userId = getMyCurrentUserId();
+      const uniqueKey = `${userId}/${uuidv4()}-${file.name}`;
+
+      // CHANGE 3: Use the new uniqueKey when asking for the signed URL
       const params = new URLSearchParams({
-        name: file.name,
+        name: uniqueKey, // Use the unique name here
         type: file.type || 'application/octet-stream',
       });
       
@@ -56,6 +80,7 @@ const Block = () => {
       }
 
       setUploadStatus({ state: 'success', message: 'File uploaded successfully!' });
+      setLastUploadedFile({ name: file.name, size: file.size });
       setFile(null);
 
     } catch (error) {

@@ -1,21 +1,21 @@
-FROM node:18-alpine
-RUN apk add --no-cache openssl
-
-EXPOSE 3000
-
+# ---- Build Stage ----
+FROM node:20-slim AS build
 WORKDIR /app
-
-ENV NODE_ENV=production
-
-COPY package.json package-lock.json* ./
-
-RUN npm ci --omit=dev && npm cache clean --force
-# Remove CLI packages since we don't need them in production by default.
-# Remove this line if you want to run CLI commands in your container.
-RUN npm remove @shopify/cli
-
+COPY package*.json ./
+RUN npm ci --ignore-scripts
 COPY . .
-
 RUN npm run build
+RUN npm prune --omit=dev
 
-CMD ["npm", "run", "docker-start"]
+# ---- Runtime Stage ----
+FROM gcr.io/distroless/nodejs20-debian12
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=build /app .
+
+# The entrypoint script will run migrations then start the server
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
+
+EXPOSE 8080
+ENTRYPOINT ["./entrypoint.sh"]
