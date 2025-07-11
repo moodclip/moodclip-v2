@@ -1,12 +1,13 @@
 import pkg from "@prisma/client";
 
-// This is the corrected import syntax for ES modules
+// This is the corrected import syntax
 const { PrismaClient } = pkg;
 
 let prisma;
 
-// This logic prevents creating multiple instances of Prisma Client in development
-// due to hot reloading. In production, a single instance is created.
+// this is needed because in development we don't want to restart
+// the server with every change, but we want to make sure we don't
+// create a new connection to the DB with every change either.
 if (process.env.NODE_ENV === "production") {
   prisma = new PrismaClient();
 } else {
@@ -16,6 +17,5 @@ if (process.env.NODE_ENV === "production") {
   prisma = global.__db;
 }
 
-// By using `export default`, we are providing a default export
-// which resolves the "default is not exported" build error.
+// This is the corrected line to match how your app imports this file
 export default prisma;
