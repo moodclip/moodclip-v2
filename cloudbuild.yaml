@@ -33,7 +33,7 @@ steps:
     - '80'
     - '--set-secrets=DATABASE_URL=DATABASE_URL:latest,SHOPIFY_API_KEY=SHOPIFY_API_KEY:latest,SHOPIFY_API_SECRET=SHOPIFY_API_SECRET:latest'
     - '--set-env-vars=GCS_BUCKET=mf-uploads-prod,SCOPES=read_products,write_script_tags,SHOPIFY_APP_URL=https://placeholder.run.app' # URL will be updated post-deploy
-    - '--add-cloudsql-instances' # Use this instead of the old --sql-instances
+    - '--add-cloudsql-instances'
     - '${_SQL_CONNECTION_NAME}'
 
 images:
@@ -44,4 +44,8 @@ substitutions:
   _REPOSITORY: backend
   _REGION: us-central1
   _SQL_CONNECTION_NAME: 'moodflow-464810:us-central1:moodflow-postgres'
+
+# Add this options block to fix the logging error
+options:
+  logging: CLOUD_LOGGING_ONLY
   
