@@ -1,16 +1,15 @@
-import { authenticate } from "../../shopify.server";
+import { authenticate } from "../shopify.server";
 import { Storage } from "@google-cloud/storage";
 import { json } from "@remix-run/node";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-
-console.log('🔥 Remix booted', new Date().toISOString());
 
 const ok = (data: object) => json(data, { status: 200 });
 const fail = (message: string, statusCode: number) =>
   json({ error: message }, { status: statusCode });
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await authenticate.proxy(request);   // ✅ validates HMAC
+  console.log('🔥 Remix booted', new Date().toISOString());
+  await authenticate.proxy(request);
 
   if (request.method === "OPTIONS") {
     return new Response(null, {
