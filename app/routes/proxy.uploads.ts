@@ -2,7 +2,9 @@ import { Storage } from "@google-cloud/storage";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const context = await authenticate.public.appProxy(request);
 
   const { GCS_BUCKET } = process.env;
 
