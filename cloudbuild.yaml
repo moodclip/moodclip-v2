@@ -31,11 +31,9 @@ steps:
     - '512Mi'
     - '--concurrency'
     - '80'
-    # CORRECTED: Using 'latest' for secrets
     - '--set-secrets=DATABASE_URL=DATABASE_URL:latest,SHOPIFY_API_KEY=SHOPIFY_API_KEY:latest,SHOPIFY_API_SECRET=SHOPIFY_API_SECRET:latest'
-    # CORRECTED: Using comma (,) as the delimiter for environment variables
-    - '--set-env-vars=GCS_BUCKET=mf-uploads-prod,SCOPES="read_products,write_script_tags",SHOPIFY_APP_URL=https://placeholder.run.app'
-    # CORRECTED: The flag is --add-cloudsql-instances
+    # FINAL FIX: Escaped the comma within the SCOPES value with a backslash.
+    - '--set-env-vars=GCS_BUCKET=mf-uploads-prod,SCOPES=read_products\,write_script_tags,SHOPIFY_APP_URL=https://placeholder.run.app'
     - '--add-cloudsql-instances'
     - '${_SQL_CONNECTION_NAME}'
 
