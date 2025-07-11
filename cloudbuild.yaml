@@ -1,13 +1,13 @@
 steps:
-# Build the container image
+# Step 1: Build the container image using Docker
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:${COMMIT_SHA}', '.']
 
-# Push the container image to Artifact Registry
+# Step 2: Push the built image to Artifact Registry
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:${COMMIT_SHA}']
 
-# Deploy container image to Cloud Run
+# Step 3: Deploy the new container image to Cloud Run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args:
@@ -31,9 +31,11 @@ steps:
     - '512Mi'
     - '--concurrency'
     - '80'
+    # CORRECTED: Using 'latest' for secrets
     - '--set-secrets=DATABASE_URL=DATABASE_URL:latest,SHOPIFY_API_KEY=SHOPIFY_API_KEY:latest,SHOPIFY_API_SECRET=SHOPIFY_API_SECRET:latest'
-    # THIS IS THE LINE THAT CHANGED
-    - '--set-env-vars=#GCS_BUCKET=mf-uploads-prod#SCOPES="read_products,write_script_tags"#SHOPIFY_APP_URL=https://placeholder.run.app'
+    # CORRECTED: Using comma (,) as the delimiter for environment variables
+    - '--set-env-vars=GCS_BUCKET=mf-uploads-prod,SCOPES="read_products,write_script_tags",SHOPIFY_APP_URL=https://placeholder.run.app'
+    # CORRECTED: The flag is --add-cloudsql-instances
     - '--add-cloudsql-instances'
     - '${_SQL_CONNECTION_NAME}'
 
@@ -46,7 +48,6 @@ substitutions:
   _REGION: us-central1
   _SQL_CONNECTION_NAME: 'moodflow-464810:us-central1:moodflow-postgres'
 
-# Add this options block to fix the logging error
+# Send build logs directly to Cloud Logging
 options:
   logging: CLOUD_LOGGING_ONLY
-  
