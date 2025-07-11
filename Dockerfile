@@ -8,7 +8,9 @@ RUN npm run build
 RUN npm prune --omit=dev
 
 # ---- Runtime Stage ----
-FROM node:20-slim AS runtime 
+FROM node:20-slim AS runtime
+# Install openssl, which is required by Prisma for PostgreSQL
+RUN apt-get update && apt-get install -y openssl
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=build /app .
