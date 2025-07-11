@@ -32,7 +32,8 @@ steps:
     - '--concurrency'
     - '80'
     - '--set-secrets=DATABASE_URL=DATABASE_URL:latest,SHOPIFY_API_KEY=SHOPIFY_API_KEY:latest,SHOPIFY_API_SECRET=SHOPIFY_API_SECRET:latest'
-    - '--set-env-vars=GCS_BUCKET=mf-uploads-prod,SCOPES="read_products,write_script_tags",SHOPIFY_APP_URL=https://placeholder.run.app' # URL will be updated post-deploy
+    # THIS IS THE LINE THAT CHANGED
+    - '--set-env-vars=#GCS_BUCKET=mf-uploads-prod#SCOPES="read_products,write_script_tags"#SHOPIFY_APP_URL=https://placeholder.run.app'
     - '--add-cloudsql-instances'
     - '${_SQL_CONNECTION_NAME}'
 
