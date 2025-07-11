@@ -1,11 +1,11 @@
 steps:
 # Step 1: Build the container image using Docker
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:${COMMIT_SHA}', '.']
+  args: ['build', '-t', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:latest', '.']
 
 # Step 2: Push the built image to Artifact Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:${COMMIT_SHA}']
+  args: ['push', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:latest']
 
 # Step 3: Deploy the new container image to Cloud Run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -15,7 +15,7 @@ steps:
     - 'deploy'
     - '${_SERVICE}'
     - '--image'
-    - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:${COMMIT_SHA}'
+    - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:latest'
     - '--region'
     - '${_REGION}'
     - '--service-account'
@@ -38,7 +38,7 @@ steps:
     - '${_SQL_CONNECTION_NAME}'
 
 images:
-- '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:${COMMIT_SHA}'
+- '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:latest'
 
 substitutions:
   _SERVICE: mf-backend
