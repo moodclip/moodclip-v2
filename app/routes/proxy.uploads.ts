@@ -1,4 +1,4 @@
-import { authenticate } from "../shopify.server";
+import { authenticate } from "./shopify.server";
 import { Storage } from "@google-cloud/storage";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";

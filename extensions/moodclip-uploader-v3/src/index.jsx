@@ -52,7 +52,7 @@ const Block = () => {
         type: file.type || 'application/octet-stream',
       });
       
-      const backendUrl = `/apps/moodclip-uploader/uploads?${params}`;
+      const backendUrl = `/apps/moodclip-uploader-v3/uploads?${params}`;
       
       const response = await fetch(backendUrl);
       const data = await response.json();
